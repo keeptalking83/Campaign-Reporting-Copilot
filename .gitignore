@@ -1,0 +1,31 @@
+# Environment
+.env
+venv/
+env/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Data files
+*.csv
+!campaign_metrics_sample.csv
+
+# Logs
+*.log
+
+# Distribution
+dist/
+build/
+*.egg-info/
