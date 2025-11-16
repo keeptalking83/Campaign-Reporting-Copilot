@@ -2,6 +2,30 @@
 
 AI-powered campaign analysis tool that transforms Meta/Google/GA4 exports into human-readable insights with actionable next steps.
 
+---
+
+## ⚡ Quick Start (3 Commands)
+
+```bash
+# 1. Clone and install
+git clone https://github.com/keeptalking83/Campaign-Reporting-Copilot.git
+cd Campaign-Reporting-Copilot
+python3 -m venv venv && source venv/bin/activate && pip install -r requirements.txt
+
+# 2. Set your OpenAI API key
+echo "OPENAI_API_KEY=sk-your-key-here" > env
+
+# 3. Start both servers (use 2 separate terminals)
+uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000  # Terminal 1 - Backend API
+streamlit run frontend/app.py                                  # Terminal 2 - Frontend UI
+```
+
+Then open http://localhost:8501 and upload your campaign CSV! 🚀
+
+**Note:** The backend automatically reads the `env` file, no need to export manually.
+
+---
+
 ## 🎯 What It Does
 
 The Campaign Reporting Copilot:
@@ -30,32 +54,91 @@ The Campaign Reporting Copilot:
 - OpenAI API key
 - pip (Python package manager)
 
-## 🚀 Installation
+## 🚀 Quick Start Guide
 
-1. **Clone or download this repository**
+### Step 1: Clone the Repository
 
-2. **Create a virtual environment** (recommended)
 ```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+git clone https://github.com/keeptalking83/Campaign-Reporting-Copilot.git
+cd Campaign-Reporting-Copilot
 ```
 
-3. **Install dependencies**
+### Step 2: Set Up Python Virtual Environment
+
+**macOS/Linux:**
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+**Windows:**
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
+
+You'll see `(venv)` appear in your terminal when the virtual environment is active.
+
+### Step 3: Install Dependencies
+
 ```bash
 pip install -r requirements.txt
 ```
 
-4. **Set up environment variables**
+This will install:
+- FastAPI & Uvicorn (backend server)
+- Streamlit (frontend interface)
+- Pandas (data processing)
+- OpenAI (AI analysis)
+- Plotly (visualizations)
 
-Create a `.env` file in the root directory:
-```bash
-cp .env.example .env
-```
+### Step 4: Set Up Your OpenAI API Key
 
-Edit `.env` and add your OpenAI API key:
+**Option A: Using Environment File (Recommended)**
+
+1. Create a file named `env` (no extension) in the project root
+2. Add your OpenAI API key:
 ```
 OPENAI_API_KEY=sk-your-actual-api-key-here
 ```
+
+**Option B: Using Terminal Export**
+
+**macOS/Linux:**
+```bash
+export OPENAI_API_KEY="sk-your-actual-api-key-here"
+```
+
+**Windows (Command Prompt):**
+```cmd
+set OPENAI_API_KEY=sk-your-actual-api-key-here
+```
+
+**Windows (PowerShell):**
+```powershell
+$env:OPENAI_API_KEY="sk-your-actual-api-key-here"
+```
+
+💡 **How to get an OpenAI API key:**
+1. Go to https://platform.openai.com/api-keys
+2. Sign in or create an account
+3. Click "Create new secret key"
+4. Copy the key (starts with `sk-`)
+
+### Step 5: Verify Installation
+
+Check if the backend is accessible:
+```bash
+python backend/main.py
+```
+
+You should see:
+```
+INFO:     Started server process
+INFO:     Uvicorn running on http://0.0.0.0:8000
+```
+
+Press `Ctrl+C` to stop the server.
 
 ## 📊 CSV Data Format
 
@@ -86,45 +169,154 @@ Your campaign export CSV should include these columns:
 
 A sample CSV file is included: `campaign_metrics_sample.csv`
 
-## 🎮 Usage
+## 🎮 How to Run the System
 
-### 1. Start the Backend API
+### Starting the Backend API (Terminal 1)
 
-Open a terminal and run:
-
+1. **Open your first terminal**
+2. **Navigate to the project directory:**
 ```bash
-cd backend
-python main.py
+cd Campaign-Reporting-Copilot
 ```
 
-The API will start on `http://localhost:8000`
+3. **Activate virtual environment:**
 
-You can verify it's running by visiting: `http://localhost:8000/health`
-
-### 2. Start the Streamlit Frontend
-
-Open a **new terminal** and run:
-
+**macOS/Linux:**
 ```bash
-cd frontend
-streamlit run app.py
+source venv/bin/activate
 ```
 
-The Streamlit app will open in your browser (usually `http://localhost:8501`)
+**Windows:**
+```bash
+venv\Scripts\activate
+```
 
-### 3. Analyze Your Campaigns
+4. **Start the backend server:**
+```bash
+uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
+```
 
-1. **Upload CSV**: Click "Upload Campaign CSV" in the sidebar
-2. **Select Period**: Choose the date range you want to analyze
-3. **Choose Comparison Mode**: 
-   - WoW (Week over Week)
-   - YoY (Year over Year)
-4. **Click "Analyze Campaigns"**: Wait for AI analysis (15-30 seconds)
-5. **Review Results**:
-   - Executive Summary
-   - Problem Areas
-   - Next Best Actions (prioritized)
-   - Performance visualizations
+**Command explained:**
+- `backend.main:app` - Points to the FastAPI app instance
+- `--reload` - Auto-restart on code changes (development mode)
+- `--host 0.0.0.0` - Accept connections from any IP
+- `--port 8000` - Run on port 8000
+
+✅ **Success indicators:**
+- You should see: `✅ OpenAI API key loaded successfully`
+- Then: `INFO: Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)`
+- And: `INFO: Started reloader process`
+- Open http://localhost:8000/health in your browser
+- You should see: `{"status":"healthy"}`
+
+⚠️ **If you see "WARNING: OPENAI_API_KEY not found":**
+- Check that your `env` file exists in the project root
+- Verify it contains: `OPENAI_API_KEY=sk-your-key-here`
+- Make sure there are no extra spaces or quotes
+
+⚠️ **Keep this terminal open!** Don't close it while using the app.
+
+---
+
+### Starting the Frontend (Terminal 2)
+
+1. **Open a NEW terminal window/tab**
+2. **Navigate to the project directory:**
+```bash
+cd Campaign-Reporting-Copilot
+```
+
+3. **Activate virtual environment:**
+
+**macOS/Linux:**
+```bash
+source venv/bin/activate
+```
+
+**Windows:**
+```bash
+venv\Scripts\activate
+```
+
+4. **Start the Streamlit app:**
+```bash
+streamlit run frontend/app.py
+```
+
+✅ **Success indicators:**
+- Your browser should automatically open to http://localhost:8501
+- You should see "Campaign Reporting Copilot" interface
+- If browser doesn't open, manually go to http://localhost:8501
+
+---
+
+### Using the Application
+
+#### Step 1: Upload Your Campaign Data
+- Click **"Upload Campaign CSV"** in the left sidebar
+- Select your campaign export file (CSV format)
+- Wait for the success message
+
+#### Step 2: Select Analysis Period
+- Use the **"Current Period"** date picker
+- Choose the date range you want to analyze
+- Default is the last 4 weeks
+
+#### Step 3: Choose Comparison Mode
+- **WoW (Week over Week)**: Compare with previous week
+  - Example: Week of Nov 4-10 vs Week of Oct 28-Nov 3
+- **YoY (Year over Year)**: Compare with same period last year
+  - Example: Nov 2024 vs Nov 2023
+
+#### Step 4: Run Analysis
+- Click **"🚀 Analyze Campaigns"** button
+- Wait 15-30 seconds for AI analysis
+- The system will:
+  - Process your data
+  - Calculate metrics and comparisons
+  - Generate AI-powered insights
+  - Create visualizations
+
+#### Step 5: Review Results
+You'll see four main sections:
+
+1. **📝 Executive Summary**
+   - High-level overview of performance
+   - Key trends and changes
+   - Overall spend and ROAS
+
+2. **⚠️ Problem Areas**
+   - Campaigns with declining ROAS
+   - Budget inefficiencies
+   - Conversion funnel issues
+
+3. **🎯 Next Best Actions**
+   - Prioritized recommendations (High/Medium/Low)
+   - Specific action items per campaign
+   - What to do immediately
+
+4. **📊 Performance Visualizations**
+   - Cost & Revenue charts
+   - ROAS by campaign
+   - CTR, CVR, CPA metrics
+   - Detailed data tables
+
+---
+
+### Stopping the System
+
+**To stop the backend:**
+1. Go to Terminal 1 (where backend is running)
+2. Press `Ctrl+C`
+
+**To stop the frontend:**
+1. Go to Terminal 2 (where Streamlit is running)
+2. Press `Ctrl+C`
+
+**To deactivate virtual environment:**
+```bash
+deactivate
+```
 
 ## 📁 Project Structure
 
@@ -230,25 +422,145 @@ Health check endpoint to verify the API is running.
 
 ## 🔧 Troubleshooting
 
-**Backend won't start:**
-- Make sure port 8000 is not in use
-- Verify `.env` file has valid OPENAI_API_KEY
-- Check Python version (3.9+)
+### Problem: Backend won't start
 
-**Frontend can't connect to backend:**
-- Ensure backend is running on localhost:8000
-- Check firewall settings
-- Verify API_URL in `frontend/app.py`
+**Error: `ModuleNotFoundError`**
+- ❌ You forgot to activate virtual environment
+- ✅ Solution: Run `source venv/bin/activate` (macOS/Linux) or `venv\Scripts\activate` (Windows)
 
-**Analysis fails or times out:**
-- Check OpenAI API key is valid
-- Verify CSV format matches expected schema
-- Ensure selected date range has data
+**Error: `Address already in use`**
+- ❌ Port 8000 is being used by another application
+- ✅ Solution: 
+  ```bash
+  # macOS/Linux - Find and kill process on port 8000
+  lsof -ti:8000 | xargs kill -9
+  
+  # Windows - Find and kill process on port 8000
+  netstat -ano | findstr :8000
+  taskkill /PID <PID_NUMBER> /F
+  ```
 
-**CSV upload error:**
-- Verify all required columns are present
-- Check date format is YYYY-MM-DD
-- Ensure numeric columns don't have text values
+**Error: `OPENAI_API_KEY not found`**
+- ❌ Environment variable not set
+- ✅ Solution:
+  - Check your `env` file exists and has the correct API key
+  - For macOS/Linux: Run `export $(cat env | xargs)` before starting backend
+  - For Windows: Set the variable manually or restart terminal after creating `env`
+
+**Error: `Python version not supported`**
+- ❌ Python version is below 3.9
+- ✅ Solution: Install Python 3.9 or higher from https://www.python.org/downloads/
+
+---
+
+### Problem: Frontend can't connect to backend
+
+**Error: `Cannot connect to API. Make sure the backend is running on port 8000`**
+- ❌ Backend is not running
+- ✅ Solution: Start the backend first (see "Starting the Backend API" section)
+
+**Error: Page shows "Connection refused"**
+- ❌ Wrong API URL or firewall blocking
+- ✅ Solution:
+  1. Verify backend is running: Open http://localhost:8000/health
+  2. Check `frontend/app.py` has `API_URL = "http://localhost:8000"`
+  3. Disable firewall temporarily to test
+
+---
+
+### Problem: Analysis fails or times out
+
+**Error: `Request timed out`**
+- ❌ OpenAI API is slow or unresponsive
+- ✅ Solution:
+  - Wait and try again (OpenAI servers might be busy)
+  - Check your internet connection
+  - Verify your OpenAI API key has available credits
+
+**Error: `Invalid API key`**
+- ❌ Wrong or expired OpenAI API key
+- ✅ Solution:
+  1. Go to https://platform.openai.com/api-keys
+  2. Verify your key is active
+  3. Check if you have available credits: https://platform.openai.com/account/billing/overview
+  4. Update your `env` file with the correct key
+
+**Error: `No data found for the current period`**
+- ❌ Selected date range has no matching data in CSV
+- ✅ Solution:
+  - Check the date range of your CSV data
+  - Select a period that has data
+  - Verify `week_start_date` column has correct dates
+
+---
+
+### Problem: CSV upload error
+
+**Error: `KeyError: 'week_start_date'`**
+- ❌ Required column is missing from CSV
+- ✅ Solution: Ensure your CSV has all required columns (see CSV Data Format section)
+
+**Error: Date parsing error**
+- ❌ Date format is incorrect
+- ✅ Solution: Dates must be in `YYYY-MM-DD` format (e.g., `2025-03-15`)
+
+**Error: `Invalid literal for float`**
+- ❌ Numeric columns contain text or special characters
+- ✅ Solution:
+  - Remove currency symbols (₺, $, etc.)
+  - Remove commas from numbers (use `12345.67` not `12,345.67`)
+  - Replace empty cells with `0`
+
+---
+
+### Quick Diagnostic Commands
+
+**Check if Python is installed:**
+```bash
+python --version  # or python3 --version
+```
+
+**Check if virtual environment is activated:**
+```bash
+which python  # macOS/Linux (should show path with 'venv')
+where python  # Windows (should show path with 'venv')
+```
+
+**Check if OpenAI package is installed:**
+```bash
+pip show openai
+```
+
+**Test backend health:**
+```bash
+curl http://localhost:8000/health
+# Should return: {"status":"healthy"}
+```
+
+---
+
+### Still Having Issues?
+
+1. **Delete and recreate virtual environment:**
+```bash
+rm -rf venv  # macOS/Linux
+rmdir /s venv  # Windows
+
+python3 -m venv venv
+source venv/bin/activate  # macOS/Linux
+venv\Scripts\activate  # Windows
+
+pip install -r requirements.txt
+```
+
+2. **Check logs:**
+- Backend errors appear in Terminal 1
+- Frontend errors appear in Terminal 2
+- Look for red error messages
+
+3. **Use sample data:**
+- Test with the included `campaign_metrics_sample.csv` first
+- If it works, the issue is with your CSV format
 
 ## 📝 Future Enhancements
 

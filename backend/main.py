@@ -5,8 +5,12 @@ from datetime import datetime, timedelta
 from typing import List, Optional
 import os
 from openai import OpenAI
+from dotenv import load_dotenv
 
 from models import AnalyzeRequest, AnalysisResponse, BulletPoint, ActionItem
+
+# Load environment variables from env file
+load_dotenv('env')
 
 app = FastAPI(title="Campaign Reporting Copilot API")
 
@@ -20,7 +24,14 @@ app.add_middleware(
 )
 
 # OpenAI client
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+api_key = os.getenv("OPENAI_API_KEY")
+if not api_key:
+    print("⚠️  WARNING: OPENAI_API_KEY not found in environment variables!")
+    print("   Please create an 'env' file with your OpenAI API key.")
+else:
+    print("✅ OpenAI API key loaded successfully")
+
+client = OpenAI(api_key=api_key)
 
 
 def calculate_derived_metrics(df: pd.DataFrame) -> pd.DataFrame:
